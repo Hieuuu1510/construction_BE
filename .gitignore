@@ -1,0 +1,33 @@
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# TypeScript build
+dist/
+build/
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Env files
+.env
+.env.* 
+
+# Editor configs
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Coverage
+coverage/
+.nyc_output/
