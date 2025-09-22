@@ -1,18 +1,18 @@
 import type { Request, Response } from "express";
-import { GalleryService } from "./gallery.service.js";
-import {
-  GalleryValidation,
-  GalleryUpdateValidation,
-} from "./gallery.schema.js";
 import mongoose from "mongoose";
+import { ProductService } from "./product.service.js";
+import {
+  ProductUpdateValidation,
+  ProductValidation,
+} from "./product.schema.js";
 
-const galleryService = new GalleryService();
+const productService = new ProductService();
 
-export class GalleryController {
-  async getGalleries(req: Request, res: Response) {
+export class ProductController {
+  async getProducts(req: Request, res: Response) {
     try {
-      const galleries = await galleryService.findMany(req.query);
-      return res.status(200).json(galleries);
+      const products = await productService.findMany(req.query);
+      return res.status(200).json(products);
     } catch (err) {
       return res.status(500).json({
         error: (err as Error).message,
@@ -20,15 +20,15 @@ export class GalleryController {
     }
   }
 
-  async getGallery(req: Request, res: Response) {
+  async getProduct(req: Request, res: Response) {
     if (!req.params.id) {
       res.status(500).json({
         err_message: "ID is required",
       });
     }
     try {
-      const gallery = await galleryService.findById(req.params.id as string);
-      return res.status(200).json(gallery);
+      const product = await productService.findById(req.params.id as string);
+      return res.status(200).json(product);
     } catch (err) {
       return res.status(400).json({
         error: (err as Error).message,
@@ -36,11 +36,11 @@ export class GalleryController {
     }
   }
 
-  async createGallery(req: Request, res: Response) {
+  async createProduct(req: Request, res: Response) {
     try {
-      await GalleryValidation.parseAsync(req.body);
-      const gallery = await galleryService.create(req.body);
-      return res.status(200).json(gallery);
+      await ProductValidation.parseAsync(req.body);
+      const product = await productService.create(req.body);
+      return res.status(200).json(product);
     } catch (err) {
       return res.status(400).json({
         error: (err as Error).message,
@@ -48,7 +48,7 @@ export class GalleryController {
     }
   }
 
-  async deleteGallery(req: Request, res: Response) {
+  async deleteProduct(req: Request, res: Response) {
     const { id } = req.params;
     if (!id) {
       res.status(500).json({
@@ -63,18 +63,18 @@ export class GalleryController {
     }
 
     try {
-      const galleryDetail = await galleryService.findById(id as string);
+      const productDetail = await productService.findById(id as string);
 
-      if (!galleryDetail) {
+      if (!productDetail) {
         return res.status(400).json({
-          err_message: "Gallery not found",
+          err_message: "product not found",
         });
       }
 
-      const result = await galleryService.remove(id as string);
+      const result = await productService.remove(id as string);
       if (result) {
         return res.status(200).json({
-          message: "Delete gallery successfully",
+          message: "Delete product successfully",
           data: result,
         });
       }
@@ -85,7 +85,7 @@ export class GalleryController {
     }
   }
 
-  async updateGallery(req: Request, res: Response) {
+  async updateProduct(req: Request, res: Response) {
     if (!req.params.id) {
       res.status(500).json({
         err_message: "ID is required",
@@ -93,22 +93,22 @@ export class GalleryController {
     }
 
     try {
-      const galleryDetail = await galleryService.findById(
+      const productDetail = await productService.findById(
         req.params.id as string
       );
 
-      if (!galleryDetail) {
+      if (!productDetail) {
         return res.status(400).json({
-          err_message: "Gallery not found",
+          err_message: "product not found",
         });
       }
 
-      await GalleryUpdateValidation.parseAsync(req.body);
-      const gallery = await galleryService.update(
+      await ProductUpdateValidation.parseAsync(req.body);
+      const product = await productService.update(
         req.params.id as string,
         req.body
       );
-      return res.status(200).json(gallery);
+      return res.status(200).json(product);
     } catch (err) {
       return res.status(400).json({
         error: (err as Error).message,

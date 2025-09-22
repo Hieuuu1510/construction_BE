@@ -1,0 +1,14 @@
+import z from "zod";
+import { GalleryType } from "../../common/enums/gallery.enum.js";
+
+export const GalleryValidation = z.object({
+  name: z.string().trim(),
+  type: z.enum(GalleryType),
+  image: z.string().optional(),
+});
+
+export const GalleryUpdateValidation = GalleryValidation.partial();
+
+// extract the inferred type
+export type Gallery = z.infer<typeof GalleryValidation>;
+export type GalleryUpdate = z.infer<typeof GalleryUpdateValidation>;

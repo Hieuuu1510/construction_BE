@@ -1,4 +1,4 @@
-export enum galleryType {
+export enum GalleryType {
   IMAGE = 'image',
   VIDEO = 'video'
 }

@@ -1,21 +1,28 @@
 import mongoose from "mongoose";
-import { galleryType } from "../../common/enums/gallery.enum.js";
+import { GalleryType } from "../../common/enums/gallery.enum.js";
 
-
-const GallerySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const GallerySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: GalleryType,
+    },
+    image: {
+      type: String,
+    },
+    category_gallery_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "categoryGallery",
+      require: true,
+    },
   },
-  type: {
-    type: String,
-    enum: galleryType
-  },
-  image: {
-    type: String
+  {
+    timestamps: true,
   }
-}, {
-  timestamps: true
-});
+);
 
-export const GalleryModel = new mongoose.Model('Gallery', GallerySchema);
+export const GalleryModel = mongoose.model("Gallery", GallerySchema);
