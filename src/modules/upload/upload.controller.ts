@@ -1,18 +1,23 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { UploadService } from "./upload.service.js";
+import { typeUpload } from "../../common/enums/upload.enum.js";
 
 const uploadService = new UploadService();
 
 export class UploadController {
-  async uploadSingle(req: Request, res: Response) {
-    console.log("controllerUpload", req.file);
+  async uploadSingle(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.file)
         return res.status(400).json({
           err_message: "No file uploaded",
         });
 
-      const result = await uploadService.uploadSingle(req.file);
+      console.log("controllerUpload", req.file);
+      const resource_type = req.file.mimetype.startsWith(typeUpload.VIDEO)
+        ? typeUpload.VIDEO
+        : typeUpload.IMAGE;
+
+      const result = await uploadService.uploadSingle(req.file, resource_type);
 
       return res.status(200).json(result);
     } catch (error) {
@@ -23,6 +28,7 @@ export class UploadController {
   }
 
   async uploadMultiple(req: Request, res: Response) {
+    console.log("controllerUploadMultiple", req.files);
     try {
       if (!req.files || !(req.files instanceof Array))
         return res.status(400).json({

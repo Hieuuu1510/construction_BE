@@ -5,6 +5,7 @@ import {
   ProductCategoriesUpdateValidation,
   ProductCategoriesValidation,
 } from "./productCategory.schema.js";
+import { ProductModel } from "../product/product.model.js";
 
 const productCategoryService = new ProductCategoryService();
 
@@ -54,22 +55,33 @@ export class ProductCategoryController {
     const { id } = req.params;
     if (!id) {
       res.status(500).json({
-        err_message: "ID is required",
+        err_message: "ID không được để trống",
       });
     }
 
     if (!mongoose.Types.ObjectId.isValid(id as string)) {
       return res.status(400).json({
-        err_message: "The provided ID is not a valid MongoDB ObjectId",
+        err_message: "ID phải có kiểu dữ liệu ObjectId",
       });
     }
 
-    try {
-      const galleryDetail = await productCategoryService.findById(id as string);
+    const resultProductCategory = await ProductModel.countDocuments({
+      product_category_id: id,
+    });
 
-      if (!galleryDetail) {
+    if (resultProductCategory > 0)
+      return res.status(400).json({
+        err_message: "Không được xoá danh mục đã gán cho sản phẩm",
+      });
+
+    try {
+      const productCategoryDetail = await productCategoryService.findById(
+        id as string
+      );
+
+      if (!productCategoryDetail) {
         return res.status(400).json({
-          err_message: "Gallery not found",
+          err_message: "Danh mục không tìm thấy",
         });
       }
 

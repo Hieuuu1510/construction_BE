@@ -14,6 +14,7 @@ const ProductCategorySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 

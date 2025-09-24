@@ -5,6 +5,7 @@ import type { Product, ProductUpdate } from "./product.schema.js";
 
 interface IProducts extends IFilterCommon {
   productCategory?: string;
+  product_category_id?: string;
 }
 
 export class ProductService {
@@ -19,12 +20,18 @@ export class ProductService {
 
     const skip = (page - 1) * limit;
 
-    const queryObj = {
-      $or: [
+    const queryObj: any = {};
+
+    if (query !== "") {
+      queryObj.$or = [
         { name: { $regex: query, $options: "i" } },
         { slug: { $regex: query, $options: "i" } },
-      ],
-    };
+      ];
+    }
+
+    if (filter?.product_category_id) {
+      queryObj.product_category_id = filter.product_category_id;
+    }
 
     const baseQuery = ProductModel.find(queryObj)
       .limit(limit)
@@ -34,6 +41,8 @@ export class ProductService {
     if (filter?.productCategory === "true") {
       baseQuery.populate("product_category_id");
     }
+
+    console.log(queryObj);
 
     const [data, total] = await Promise.all([
       baseQuery,

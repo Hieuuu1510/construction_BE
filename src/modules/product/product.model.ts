@@ -19,9 +19,13 @@ const ProductSchema = new mongoose.Schema(
       ref: "productCategory",
       require: true,
     },
+    image: {
+      type: [String],
+    },
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
