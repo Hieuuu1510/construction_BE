@@ -3,7 +3,7 @@ import { connect } from "./config/db/index.js";
 import express from "express";
 import router from "./routers/index.js";
 import cors from "cors";
-import { errorGlobal } from "./common/utils/errorGlobal.js";
+import { errorGlobal } from "./middleware/errorGlobal.js";
 
 dotenv.config();
 

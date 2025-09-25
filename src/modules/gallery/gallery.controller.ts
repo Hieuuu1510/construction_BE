@@ -21,11 +21,6 @@ export class GalleryController {
   }
 
   async getGallery(req: Request, res: Response) {
-    if (!req.params.id) {
-      res.status(500).json({
-        err_message: "ID is required",
-      });
-    }
     try {
       const gallery = await galleryService.findById(req.params.id as string);
       return res.status(200).json(gallery);
@@ -38,7 +33,6 @@ export class GalleryController {
 
   async createGallery(req: Request, res: Response) {
     try {
-      await GalleryValidation.parseAsync(req.body);
       const gallery = await galleryService.create(req.body);
       return res.status(200).json(gallery);
     } catch (err) {
@@ -78,6 +72,22 @@ export class GalleryController {
           data: result,
         });
       }
+    } catch (error) {
+      return res.status(400).json({
+        error: (error as Error).message,
+      });
+    }
+  }
+
+  async deleteMultipleGallery(req: Request, res: Response) {
+    const { ids } = req.body;
+    console.log(ids);
+    try {
+      const result = await galleryService.removeMultiple(ids);
+      return res.status(200).json({
+        message: "Xoá galleries thành công",
+        data: result,
+      });
     } catch (error) {
       return res.status(400).json({
         error: (error as Error).message,

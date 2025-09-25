@@ -1,9 +1,11 @@
-import { Router, type Application, type Request, type Response } from "express";
+import { Router, type Request, type Response } from "express";
 
 import galleryRouter from "../modules/gallery/gallery.route.js";
 import productRouter from "../modules/product/product.route.js";
 import productCategoryRouter from "../modules/productCategory/productCategory.route.js";
 import uploadRouter from "../modules/upload/upload.route.js";
+import newsRouter from "../modules/news/news.route.js";
+import newsCategoryRouter from "../modules/newsCategory/newsCategory.route.js";
 
 const router = Router();
 
@@ -15,5 +17,7 @@ router.use("/gallery", galleryRouter);
 router.use("/product", productRouter);
 router.use("/productCategory", productCategoryRouter);
 router.use("/upload", uploadRouter);
+router.use("/newsCategory", newsCategoryRouter);
+router.use("/news", newsRouter);
 
 export default router;

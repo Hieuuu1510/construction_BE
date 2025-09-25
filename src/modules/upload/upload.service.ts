@@ -10,18 +10,18 @@ export class UploadService {
     });
 
     // tạo thumbnail
-    let thumbnailUrl: string | undefined;
+    // let thumbnailUrl: string | undefined;
 
-    if (resource_type === typeUpload.VIDEO) {
-      thumbnailUrl = cloudinary.url(result.public_id, {
-        resource_type: typeUpload.VIDEO,
-        format: "jpg",
-        transformation: [
-          { start_offset: "2" }, // lấy frame tại giây thứ 2
-          { crop: "fill" }, // resize thumbnail
-        ],
-      });
-    }
+    // if (resource_type === typeUpload.VIDEO) {
+    //   thumbnailUrl = cloudinary.url(result.public_id, {
+    //     resource_type: typeUpload.VIDEO,
+    //     format: "jpg",
+    //     transformation: [
+    //       { start_offset: "2" }, // lấy frame tại giây thứ 2
+    //       { crop: "fill" }, // resize thumbnail
+    //     ],
+    //   });
+    // }
 
     console.log(result);
     // xoá file
@@ -29,9 +29,9 @@ export class UploadService {
 
     return {
       url: result.secure_url,
-      thumbnailUrl,
-      resource_type: result.resource_type,
-      public_id: result.public_id,
+      // thumbnailUrl,
+      // resource_type: result.resource_type,
+      // public_id: result.public_id,
     };
   }
 
@@ -45,27 +45,27 @@ export class UploadService {
         });
 
         // tạo thumbnail
-        let thumbnailUrl: string | undefined;
+        // let thumbnailUrl: string | undefined;
 
-        if (isVideo) {
-          thumbnailUrl = cloudinary.url(result.public_id, {
-            resource_type: typeUpload.VIDEO,
-            format: "jpg",
-            transformation: [
-              { start_offset: "2" }, // lấy frame tại giây thứ 2
-              { crop: "fill" }, // resize thumbnail
-            ],
-          });
-        }
+        // if (isVideo) {
+        //   thumbnailUrl = cloudinary.url(result.public_id, {
+        //     resource_type: typeUpload.VIDEO,
+        //     format: "jpg",
+        //     transformation: [
+        //       { start_offset: "2" }, // lấy frame tại giây thứ 2
+        //       { crop: "fill" }, // resize thumbnail
+        //     ],
+        //   });
+        // }
 
         // xoá file
         fs.unlinkSync(file.path);
 
         return {
           url: result.secure_url,
-          thumbnailUrl,
-          resource_type: result.resource_type,
-          public_id: result.public_id,
+          // thumbnailUrl,
+          // resource_type: result.resource_type,
+          // public_id: result.public_id,
         };
       } catch (error) {
         console.error(`Upload failed for file: ${file.path}`, error);

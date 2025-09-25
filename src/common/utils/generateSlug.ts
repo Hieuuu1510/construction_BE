@@ -3,6 +3,7 @@ import type mongoose from "mongoose";
 export const slugify = (str: string) => {
   return str
     .toString()
+    .replace(/[đĐ]/g, "d") // Thay đ -> d
     .normalize("NFD") // Chuyển đổi chuỗi sang dạng bình thường, loại bỏ các dấu điều âm
     .replace(/[\u0300-\u036f]/g, "") // Loại bỏ các ký tự dấu điều âm
     .toLowerCase() // Chuyển đổi chuỗi sang chữ thường
