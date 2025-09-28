@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { GalleryType } from "../../common/enums/gallery.enum.js";
+import { Status } from "../../common/enums/status.enum.js";
 
 const GallerySchema = new mongoose.Schema(
   {
@@ -13,6 +14,11 @@ const GallerySchema = new mongoose.Schema(
     },
     image: {
       type: String,
+    },
+    status: {
+      type: String,
+      enum: Status,
+      default: Status.ACTIVE,
     },
   },
   {

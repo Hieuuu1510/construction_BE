@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { generateSlug } from "../../common/utils/generateSlug.js";
+import { Status } from "../../common/enums/status.enum.js";
 
 const NewsCategorySchema = new mongoose.Schema(
   {
@@ -10,6 +11,11 @@ const NewsCategorySchema = new mongoose.Schema(
     slug: {
       type: String,
       unique: true,
+    },
+    status: {
+      type: String,
+      enum: Status,
+      default: Status.ACTIVE,
     },
   },
   {
@@ -38,7 +44,7 @@ NewsCategorySchema.pre("findOneAndUpdate", async function (next) {
   }
   next();
 });
-
+// Tin tức
 export const NewsCategoryModel = mongoose.model(
   "newsCategory",
   NewsCategorySchema,

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { generateSlug } from "../../common/utils/generateSlug.js";
+import { Status } from "../../common/enums/status.enum.js";
 
 const NewsSchema = new mongoose.Schema(
   {
@@ -21,6 +22,16 @@ const NewsSchema = new mongoose.Schema(
     },
     cover: {
       type: String,
+    },
+    view_count: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    status: {
+      type: String,
+      enum: Status,
+      default: Status.ACTIVE,
     },
   },
   {

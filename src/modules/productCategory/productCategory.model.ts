@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { generateSlug } from "../../common/utils/generateSlug.js";
+import { Status } from "../../common/enums/status.enum.js";
 
 const ProductCategorySchema = new mongoose.Schema(
   {
@@ -10,6 +11,11 @@ const ProductCategorySchema = new mongoose.Schema(
     slug: {
       type: String,
       unique: true,
+    },
+    status: {
+      type: String,
+      enum: Status,
+      default: Status.ACTIVE,
     },
   },
   {
@@ -39,6 +45,7 @@ ProductCategorySchema.pre("findOneAndUpdate", async function (next) {
   next();
 });
 
+// Kinh doanh
 export const ProductCategoryModel = mongoose.model(
   "productCategory",
   ProductCategorySchema,

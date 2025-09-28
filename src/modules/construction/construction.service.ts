@@ -1,18 +1,17 @@
-import { NewsModel } from "./news.model.js";
+import { ConstructionModel } from "./construction.model.js";
 import { Sort } from "../../common/enums/sort.enum.js";
-import type { IFilterCommon } from "../../common/interfaces/filter.interface.js";
-import {
-  NewsUpdateValidation,
-  NewsValidation,
-  type News,
-  type NewsUpdate,
-} from "./news.schema.js";
 import httpError from "../../common/helper/httpError.helper.js";
 import mongoose from "mongoose";
-import type { INews } from "./news.filter.js";
+import type { IConstructionFilter } from "./construction.filter.js";
+import {
+  constructionUpdateValidation,
+  constructionValidation,
+  type IConstruction,
+  type IConstructionUpdate,
+} from "./construction.schema.js";
 
-export class NewsService {
-  async findMany(filter: INews) {
+export class ConstructionService {
+  async findMany(filter: IConstructionFilter) {
     const {
       page = 1,
       limit = 10,
@@ -32,8 +31,8 @@ export class NewsService {
       ];
     }
 
-    if (filter?.news_category_id) {
-      queryObj.news_category_id = filter.news_category_id;
+    if (filter?.construction_category_id) {
+      queryObj.construction_category_id = filter.construction_category_id;
     }
 
     if (filter?.view_count) {
@@ -48,18 +47,18 @@ export class NewsService {
       };
     }
 
-    const baseQuery = NewsModel.find(queryObj)
+    const baseQuery = ConstructionModel.find(queryObj)
       .limit(limit)
       .skip(skip)
       .sort({ [column]: sort === Sort.DESC ? -1 : 1 });
 
-    if (filter?.newsCategory === "true") {
-      baseQuery.populate("news_category_id");
+    if (filter?.constructionCategory === "true") {
+      baseQuery.populate("construction_category_id");
     }
 
     const [data, total] = await Promise.all([
       baseQuery,
-      NewsModel.countDocuments(),
+      ConstructionModel.countDocuments(),
     ]);
 
     return {
@@ -74,17 +73,16 @@ export class NewsService {
     if (!mongoose.Types.ObjectId.isValid(id as string))
       throw new httpError(400, "ID phải có kiểu dữ liệu ObjectId");
 
-    // mỗi lần gọi detail thì tăng thêm 1 view
-    await NewsModel.findByIdAndUpdate(id, {
-      $inc: { view_count: 1 },
+    await ConstructionModel.findByIdAndUpdate(id, {
+      $inc: { view_count: 1 }, // $inc tăng giảm giá trị của feild
     });
 
-    const newsDetail = await NewsModel.findById(id).populate(
-      "news_category_id"
+    const newsDetail = await ConstructionModel.findById(id).populate(
+      "construction_category_id"
     );
 
     const relatedNews = await this.findMany({
-      news_category_id: id,
+      construction_category_id: id,
       exclude_id: { $ne: newsDetail?._id as mongoose.Types.ObjectId }, // $ne lấy tất cả các _id khác trừ _id hiện tại
     });
 
@@ -98,9 +96,9 @@ export class NewsService {
     };
   }
 
-  async create(data: News) {
-    await NewsValidation.parseAsync(data);
-    return NewsModel.create(data);
+  async create(data: IConstruction) {
+    await constructionValidation.parseAsync(data);
+    return ConstructionModel.create(data);
   }
 
   async remove(id: string) {
@@ -110,7 +108,7 @@ export class NewsService {
       throw new httpError(400, "Tin tức không tồn tại");
     }
 
-    const resultDelete = await NewsModel.findByIdAndDelete(id);
+    const resultDelete = await ConstructionModel.findByIdAndDelete(id);
 
     if (!resultDelete) {
       throw new httpError(500, "Xoá tin tức thất bại");
@@ -119,15 +117,15 @@ export class NewsService {
     return resultDelete;
   }
 
-  async update(id: string, data: NewsUpdate) {
+  async update(id: string, data: IConstructionUpdate) {
     const newsDetail = await this.findById(id);
 
     if (!newsDetail) {
       throw new httpError(400, "Tin tức không tồn tại");
     }
 
-    await NewsUpdateValidation.parseAsync(data);
-    const resultUpdate = await NewsModel.findByIdAndUpdate(id, data, {
+    await constructionUpdateValidation.parseAsync(data);
+    const resultUpdate = await ConstructionModel.findByIdAndUpdate(id, data, {
       new: true,
     });
 

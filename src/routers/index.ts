@@ -6,6 +6,8 @@ import productCategoryRouter from "../modules/productCategory/productCategory.ro
 import uploadRouter from "../modules/upload/upload.route.js";
 import newsRouter from "../modules/news/news.route.js";
 import newsCategoryRouter from "../modules/newsCategory/newsCategory.route.js";
+import constructionCategoryRouter from "../modules/constructionCategory/constructionCategory.route.js";
+import constructionRouter from "../modules/construction/construction.route.js";
 
 const router = Router();
 
@@ -15,9 +17,11 @@ router.get("/", (req: Request, res: Response) => {
 
 router.use("/gallery", galleryRouter);
 router.use("/product", productRouter);
-router.use("/productCategory", productCategoryRouter);
+router.use("/product-category", productCategoryRouter);
 router.use("/upload", uploadRouter);
-router.use("/newsCategory", newsCategoryRouter);
+router.use("/news-category", newsCategoryRouter);
 router.use("/news", newsRouter);
+router.use("/construction-category", constructionCategoryRouter);
+router.use("/construction", constructionRouter);
 
 export default router;

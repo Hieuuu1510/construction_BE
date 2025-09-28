@@ -1,7 +1,9 @@
 import z from "zod";
+import { Status } from "../../common/enums/status.enum.js";
 
 export const ProductCategoriesValidation = z.object({
   name: z.string().trim(),
+  status: z.enum(Status).optional(),
 });
 
 export const ProductCategoriesUpdateValidation =

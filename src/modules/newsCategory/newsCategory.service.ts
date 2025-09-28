@@ -11,8 +11,12 @@ import {
 } from "./newsCategory.schema.js";
 import { NewsModel } from "../news/news.model.js";
 
+interface INews extends IFilterCommon {
+  news_count?: "true";
+}
+
 export class NewsCategoryService {
-  async findMany(filter: IFilterCommon) {
+  async findMany(filter: INews) {
     const {
       page = 1,
       limit = 10,
@@ -32,11 +36,50 @@ export class NewsCategoryService {
       ];
     }
 
+    const pipeline: mongoose.PipelineStage[] = [
+      {
+        $match: queryObj,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $sort: {
+          [column]: sort === Sort.DESC ? -1 : 1,
+        },
+      },
+    ];
+
+    if (filter?.news_count === "true") {
+      pipeline.push(
+        {
+          $lookup: {
+            from: "news", // kết nối với bảng news
+            localField: "_id", // _id của bảng news_category
+            foreignField: "news_category_id", // _id của bảng news
+            as: "news", // tạo mảng news
+          },
+        },
+        {
+          $addFields: {
+            news_count: {
+              $size: "$news", // đếm dữ liệu của mảng $news
+            },
+          },
+        },
+        {
+          $project: {
+            news: 0, // bỏ field news
+          },
+        }
+      );
+    }
+
     const [data, total] = await Promise.all([
-      NewsCategoryModel.find(queryObj)
-        .limit(limit)
-        .skip(skip)
-        .sort({ [column]: sort === Sort.DESC ? -1 : 1 }),
+      NewsCategoryModel.aggregate(pipeline),
       NewsCategoryModel.countDocuments(),
     ]);
 
