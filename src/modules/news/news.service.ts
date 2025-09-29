@@ -1,6 +1,5 @@
 import { NewsModel } from "./news.model.js";
 import { Sort } from "../../common/enums/sort.enum.js";
-import type { IFilterCommon } from "../../common/interfaces/filter.interface.js";
 import {
   NewsUpdateValidation,
   NewsValidation,
@@ -32,8 +31,8 @@ export class NewsService {
       ];
     }
 
-    if (filter?.news_category_id) {
-      queryObj.news_category_id = filter.news_category_id;
+    if (filter?.news_category_ids) {
+      queryObj.news_category_ids = filter.news_category_ids;
     }
 
     if (filter?.view_count) {
@@ -54,12 +53,12 @@ export class NewsService {
       .sort({ [column]: sort === Sort.DESC ? -1 : 1 });
 
     if (filter?.newsCategory === "true") {
-      baseQuery.populate("news_category_id");
+      baseQuery.populate("news_category_ids");
     }
 
     const [data, total] = await Promise.all([
       baseQuery,
-      NewsModel.countDocuments(),
+      NewsModel.countDocuments(queryObj),
     ]);
 
     return {
@@ -80,12 +79,12 @@ export class NewsService {
     });
 
     const newsDetail = await NewsModel.findById(id).populate(
-      "news_category_id"
+      "news_category_ids"
     );
 
     const relatedNews = await this.findMany({
-      news_category_id: id,
-      exclude_id: { $ne: newsDetail?._id as mongoose.Types.ObjectId }, // $ne lấy tất cả các _id khác trừ _id hiện tại
+      news_category_ids: [id],
+      exclude_id: newsDetail?._id as mongoose.Types.ObjectId, // $ne lấy tất cả các _id khác trừ _id hiện tại
     });
 
     if (!newsDetail) {
@@ -94,7 +93,7 @@ export class NewsService {
 
     return {
       data: newsDetail,
-      relatedNews,
+      relatedNews: relatedNews.data,
     };
   }
 

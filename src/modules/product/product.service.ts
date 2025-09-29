@@ -8,11 +8,7 @@ import {
   type ProductUpdate,
 } from "./product.schema.js";
 import mongoose from "mongoose";
-
-interface IProducts extends IFilterCommon {
-  productCategory?: string;
-  product_category_id?: string;
-}
+import type { IProducts } from "./product.filter.js";
 
 export class ProductService {
   async findMany(filter: IProducts) {
@@ -35,8 +31,8 @@ export class ProductService {
       ];
     }
 
-    if (filter?.product_category_id) {
-      queryObj.product_category_id = filter.product_category_id;
+    if (filter?.product_category_ids) {
+      queryObj.product_category_id = filter.product_category_ids;
     }
 
     const baseQuery = ProductModel.find(queryObj)
@@ -45,12 +41,12 @@ export class ProductService {
       .sort({ [column]: sort === Sort.DESC ? -1 : 1 });
 
     if (filter?.productCategory === "true") {
-      baseQuery.populate("product_category_id");
+      baseQuery.populate("product_category_ids");
     }
 
     const [data, total] = await Promise.all([
       baseQuery,
-      ProductModel.countDocuments(),
+      ProductModel.countDocuments(queryObj),
     ]);
 
     return {
@@ -64,11 +60,11 @@ export class ProductService {
       throw new Error("ID không được bỏ trống");
     }
 
-    if (!mongoose.Types.ObjectId.isValid(id as string)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new Error("ID phải có kiểu dữ liệu ObjectId");
     }
 
-    return await ProductModel.findById(id).populate("product_category_id");
+    return await ProductModel.findById(id).populate("product_category_ids");
   }
 
   async create(data: Product) {
@@ -92,7 +88,7 @@ export class ProductService {
     const resultDelete = await ProductModel.findByIdAndDelete(id);
 
     if (!resultDelete) {
-      throw new Error("Xoa san pham that bai");
+      throw new Error("Xóa sản phẩm thất bại");
     }
 
     return resultDelete;

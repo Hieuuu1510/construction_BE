@@ -12,21 +12,31 @@ const constructionSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    image: {
-      type: String,
+    images: {
+      type: [String],
+      default: [],
     },
     content: {
       type: String,
-    },
-    construction_category_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "constructionCategory",
-      require: true,
     },
     status: {
       type: String,
       enum: Status,
       default: Status.ACTIVE,
+    },
+    construction_category_ids: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "constructionCategory",
+          required: true,
+        },
+      ],
+      default: [],
+    },
+    view_count: {
+      type: Number,
+      default: 0,
     },
   },
   {

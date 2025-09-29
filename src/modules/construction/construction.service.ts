@@ -31,8 +31,8 @@ export class ConstructionService {
       ];
     }
 
-    if (filter?.construction_category_id) {
-      queryObj.construction_category_id = filter.construction_category_id;
+    if (filter?.construction_category_ids) {
+      queryObj.construction_category_ids = filter.construction_category_ids;
     }
 
     if (filter?.view_count) {
@@ -53,12 +53,12 @@ export class ConstructionService {
       .sort({ [column]: sort === Sort.DESC ? -1 : 1 });
 
     if (filter?.constructionCategory === "true") {
-      baseQuery.populate("construction_category_id");
+      baseQuery.populate("construction_category_ids");
     }
 
     const [data, total] = await Promise.all([
       baseQuery,
-      ConstructionModel.countDocuments(),
+      ConstructionModel.countDocuments(queryObj),
     ]);
 
     return {
@@ -77,22 +77,22 @@ export class ConstructionService {
       $inc: { view_count: 1 }, // $inc tăng giảm giá trị của feild
     });
 
-    const newsDetail = await ConstructionModel.findById(id).populate(
-      "construction_category_id"
+    const constructionDetail = await ConstructionModel.findById(id).populate(
+      "construction_category_ids"
     );
 
     const relatedNews = await this.findMany({
-      construction_category_id: id,
-      exclude_id: { $ne: newsDetail?._id as mongoose.Types.ObjectId }, // $ne lấy tất cả các _id khác trừ _id hiện tại
+      construction_category_ids: id,
+      exclude_id: constructionDetail?._id as mongoose.Types.ObjectId, // $ne lấy tất cả các _id khác trừ _id hiện tại
     });
 
-    if (!newsDetail) {
+    if (!constructionDetail) {
       throw new httpError(400, "Tin tức không tồn tại");
     }
 
     return {
-      data: newsDetail,
-      relatedNews,
+      data: constructionDetail,
+      relatedNews: relatedNews?.data,
     };
   }
 

@@ -45,7 +45,7 @@ constructionCategorySchema.pre("findOneAndUpdate", async function (next) {
 
 // thi công
 export const ConstructionCategoryModel = mongoose.model(
-  "constructionCategorySchema",
+  "constructionCategory",
   constructionCategorySchema,
   "construction_category"
 );

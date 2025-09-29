@@ -2,12 +2,22 @@ import mongoose from "mongoose";
 import z from "zod";
 import { Status } from "../../common/enums/status.enum.js";
 
+const objectIdSchema = z
+  .string()
+  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Id phải có kiểu dữ liệu ObjectId",
+  });
+
 export const ProductValidation = z.object({
-  name: z.string().trim(),
+  name: z.string("name phải có kiểu dữ liệu là string").trim(),
   description: z.string().optional(),
-  image: z.array(z.string()).optional(),
-  product_category_id: z.string(),
-  status: z.enum(Status).optional(),
+  images: z.array(z.string()).optional(),
+  product_category_ids: z
+    .array(objectIdSchema, {
+      message: "Danh mục phải là một mảng",
+    })
+    .nonempty("Danh mục không được là mảng rỗng"),
+  status: z.enum(Status, "Trạng thái không hợp lệ").optional(),
 });
 
 export const ProductUpdateValidation = ProductValidation.partial();

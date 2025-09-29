@@ -1,7 +1,5 @@
 import type { Request, Response } from "express";
-import mongoose from "mongoose";
 import { NewsService } from "./news.service.js";
-import { NewsValidation, NewsUpdateValidation } from "./news.schema.js";
 
 const newsService = new NewsService();
 

@@ -15,13 +15,19 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    product_category_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "productCategory",
-      require: true,
+    product_category_ids: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "productCategory",
+          required: true,
+        },
+      ],
+      default: [],
     },
-    image: {
+    images: {
       type: [String],
+      default: [],
     },
     status: {
       type: String,

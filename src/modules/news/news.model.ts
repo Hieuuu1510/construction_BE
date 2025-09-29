@@ -15,10 +15,15 @@ const NewsSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
-    news_category_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "newsCategory",
-      require: true,
+    news_category_ids: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "newsCategory",
+          required: true,
+        },
+      ],
+      default: [],
     },
     cover: {
       type: String,
