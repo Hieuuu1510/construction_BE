@@ -44,31 +44,11 @@ export class GalleryController {
 
   async deleteGallery(req: Request, res: Response) {
     const { id } = req.params;
-    if (!id) {
-      res.status(500).json({
-        err_message: "ID is required",
-      });
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(id as string)) {
-      return res.status(400).json({
-        err_message: "The provided ID is not a valid MongoDB ObjectId",
-      });
-    }
-
     try {
-      const galleryDetail = await galleryService.findById(id as string);
-
-      if (!galleryDetail) {
-        return res.status(400).json({
-          err_message: "Gallery not found",
-        });
-      }
-
       const result = await galleryService.remove(id as string);
       if (result) {
         return res.status(200).json({
-          message: "Delete gallery successfully",
+          message: "Xóa gallery thành công",
           data: result,
         });
       }
@@ -81,7 +61,6 @@ export class GalleryController {
 
   async deleteMultipleGallery(req: Request, res: Response) {
     const { ids } = req.body;
-    console.log(ids);
     try {
       const result = await galleryService.removeMultiple(ids);
       return res.status(200).json({
@@ -103,17 +82,6 @@ export class GalleryController {
     }
 
     try {
-      const galleryDetail = await galleryService.findById(
-        req.params.id as string
-      );
-
-      if (!galleryDetail) {
-        return res.status(400).json({
-          err_message: "Gallery not found",
-        });
-      }
-
-      await GalleryUpdateValidation.parseAsync(req.body);
       const gallery = await galleryService.update(
         req.params.id as string,
         req.body

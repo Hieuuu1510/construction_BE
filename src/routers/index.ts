@@ -8,6 +8,8 @@ import newsRouter from "../modules/news/news.route.js";
 import newsCategoryRouter from "../modules/newsCategory/newsCategory.route.js";
 import constructionCategoryRouter from "../modules/constructionCategory/constructionCategory.route.js";
 import constructionRouter from "../modules/construction/construction.route.js";
+import featuredProjectsRouter from "../modules/featuredProjects/featuredProjects.route.js";
+import contactRouter from "../modules/contact/contact.route.js";
 
 const router = Router();
 
@@ -23,5 +25,7 @@ router.use("/news-category", newsCategoryRouter);
 router.use("/news", newsRouter);
 router.use("/construction-category", constructionCategoryRouter);
 router.use("/construction", constructionRouter);
+router.use("/featured-projects", featuredProjectsRouter);
+router.use("/contact", contactRouter);
 
 export default router;
