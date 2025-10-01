@@ -74,7 +74,7 @@ export class ContactService {
     return create;
   }
 
-  exports(data: Contact[]) {
+  exportsExcel(data: Contact[]) {
     return exportToExcel({
       data,
       sheetName: "Contact",
@@ -86,6 +86,7 @@ export class ContactService {
       throw new httpError(400, "File không hợp lệ");
     }
 
+    // đọc file excel
     const wb = XLSX.readFile(file.path);
 
     if (!wb.SheetNames || wb.SheetNames.length === 0) {
@@ -114,5 +115,15 @@ export class ContactService {
     }
 
     return resultInsertMany;
+  }
+
+  exportsCSV(data: Contact[]) {
+    // json -> sheet
+    const workSheet = XLSX.utils.json_to_sheet(data);
+
+    // sheet -> csv
+    const csv = XLSX.utils.sheet_to_csv(workSheet);
+
+    return csv;
   }
 }

@@ -1,5 +1,9 @@
 import type { Request, Response } from "express";
 import { ContactService } from "./contact.service.js";
+import {
+  ExportType,
+  UploadMimeTypeFile,
+} from "../../common/enums/export.enum.js";
 
 const contactService = new ContactService();
 
@@ -33,18 +37,40 @@ export class ContactController {
   }
 
   exportsContact(req: Request, res: Response) {
+    const { type, data } = req.body;
+
+    console.log(req.body);
+
+    let contactsExport;
     try {
-      const contact = contactService.exports(req.body);
-      // cho client biết kiểu file
-      res.header(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      );
+      switch (type) {
+        case ExportType.CSV:
+          contactsExport = contactService.exportsCSV(data);
 
-      // attachment: file download, filename: ten file
-      res.header("Content-Disposition", 'attachment; filename="Contact.xlsx"');
+          res.header("Content-Type", UploadMimeTypeFile.CSV);
+          res.header(
+            "Content-Disposition",
+            'attachment; filename="Contact.csv"'
+          );
+          break;
+        case ExportType.XLSX:
+          contactsExport = contactService.exportsExcel(data);
+          // cho client biết kiểu file
+          res.header("Content-Type", UploadMimeTypeFile.XLSX);
 
-      res.status(200).send(contact);
+          // attachment: file download, filename: ten file
+          res.header(
+            "Content-Disposition",
+            'attachment; filename="Contact.xlsx"'
+          );
+          break;
+        case ExportType.PDF:
+          break;
+        default:
+          break;
+      }
+
+      res.status(200).send(contactsExport);
     } catch (error) {
       res.status(500).json({ err_message: (error as Error).message });
     }
@@ -54,6 +80,21 @@ export class ContactController {
     try {
       const contacts = await contactService.imports(req.file);
       res.status(200).json(contacts);
+    } catch (error) {
+      res.status(500).json({ err_message: (error as Error).message });
+    }
+  }
+
+  exportsContactsCSV(req: Request, res: Response) {
+    try {
+      const contacts = contactService.exportsCSV(req.body);
+      // cho client biết kiểu file
+      res.header("Content-Type", "text/csv; charset=utf-8");
+
+      // attachment: file download, filename: ten file
+      res.header("Content-Disposition", 'attachment; filename="Contact.csv"');
+
+      res.status(200).send(contacts);
     } catch (error) {
       res.status(500).json({ err_message: (error as Error).message });
     }
