@@ -2,7 +2,7 @@ import multer from "multer";
 import path from "path";
 import { typeUpload } from "../common/enums/upload.enum.js";
 
-export const upload = multer({
+export const uploadImageVideo = multer({
   dest: "src/uploads/files/",
   limits: {
     fileSize: 20 * 1024 * 1024,
@@ -39,3 +39,7 @@ function checkFileType(
       : cb(new Error("Error: Images only! (jpeg, jpg, png, gif)"));
   }
 }
+
+export const uploadFile = multer({
+  dest: "src/uploads/",
+});

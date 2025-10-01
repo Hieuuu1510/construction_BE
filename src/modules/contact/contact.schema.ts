@@ -10,10 +10,10 @@ export const ContactValidation = z.object({
   email: z
     .email("kiểu dữ liệu không hợp lệ")
     .trim()
-    .refine((val) => !val, {
+    .refine((val) => val, {
       message: "email không được để trống",
     }),
-  phone: z.number().refine((val) => !val, {
+  phone: z.string().refine((val) => val, {
     message: "phone không được để trống",
   }),
   title: z.string().trim(),

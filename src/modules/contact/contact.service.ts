@@ -4,6 +4,9 @@ import httpError from "../../common/helper/httpError.helper.js";
 import type { IFilterCommon } from "../../common/interfaces/filter.interface.js";
 import { ContactModel } from "./contact.model.js";
 import { ContactValidation, type Contact } from "./contact.schema.js";
+import XLSX from "xlsx";
+import { exportToExcel } from "../../common/helper/exportToExcel.helper.js";
+import fs from "fs";
 
 export class ContactService {
   async findMany(filter: IFilterCommon) {
@@ -69,5 +72,47 @@ export class ContactService {
     }
 
     return create;
+  }
+
+  exports(data: Contact[]) {
+    return exportToExcel({
+      data,
+      sheetName: "Contact",
+    });
+  }
+
+  async imports(file: Express.Multer.File | undefined) {
+    if (!file) {
+      throw new httpError(400, "File không hợp lệ");
+    }
+
+    const wb = XLSX.readFile(file.path);
+
+    if (!wb.SheetNames || wb.SheetNames.length === 0) {
+      throw new httpError(400, "File không chứa sheet nào");
+    }
+
+    const sheetName = wb.SheetNames[0];
+    const workSheet = wb.Sheets[sheetName as string];
+
+    fs.unlinkSync(file.path);
+
+    if (!workSheet) {
+      throw new httpError(400, `Không đọc được dữ liệu từ file ${sheetName}`);
+    }
+
+    const data = XLSX.utils.sheet_to_json(workSheet as XLSX.WorkSheet);
+
+    if (!data.length) {
+      throw new httpError(400, "Sheet không có dữ liệu");
+    }
+
+    const resultInsertMany = await ContactModel.insertMany(data);
+
+    if (!resultInsertMany) {
+      throw new httpError(500, "Tạo liên hệ thất bại");
+    }
+
+    return resultInsertMany;
   }
 }

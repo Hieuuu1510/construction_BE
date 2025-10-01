@@ -31,4 +31,31 @@ export class ContactController {
       res.status(500).json({ err_message: (error as Error).message });
     }
   }
+
+  exportsContact(req: Request, res: Response) {
+    try {
+      const contact = contactService.exports(req.body);
+      // cho client biết kiểu file
+      res.header(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
+
+      // attachment: file download, filename: ten file
+      res.header("Content-Disposition", 'attachment; filename="Contact.xlsx"');
+
+      res.status(200).send(contact);
+    } catch (error) {
+      res.status(500).json({ err_message: (error as Error).message });
+    }
+  }
+
+  async importContacts(req: Request, res: Response) {
+    try {
+      const contacts = await contactService.imports(req.file);
+      res.status(200).json(contacts);
+    } catch (error) {
+      res.status(500).json({ err_message: (error as Error).message });
+    }
+  }
 }
