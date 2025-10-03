@@ -7,9 +7,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"tsc --watch\" \"nodemon dist/index.js\""
+    "dev": "concurrently \"tsc --watch\" \"nodemon dist/index.js\"",
+    "build": "tsc && cp -r src/views dist/views"
   },
   "dependencies": {
     "@types/node": "^24.5.2",
@@ -17,17 +17,19 @@
     "concurrently": "^9.2.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
-    "excel4node": "^1.8.2",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
     "mongoose": "^8.18.1",
     "multer": "^2.0.2",
     "nodemon": "^3.1.10",
+    "puppeteer": "^24.23.0",
     "typescript": "^5.9.2",
     "xlsx": "^0.18.5",
     "zod": "^4.1.9"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.3",
     "@types/multer": "^2.0.0"
   }

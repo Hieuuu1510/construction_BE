@@ -7,6 +7,7 @@ import { ContactValidation, type Contact } from "./contact.schema.js";
 import XLSX from "xlsx";
 import { exportToExcel } from "../../common/helper/exportToExcel.helper.js";
 import fs from "fs";
+import { exportToPdf } from "../../common/helper/exportToPdf.helper.js";
 
 export class ContactService {
   async findMany(filter: IFilterCommon) {
@@ -125,5 +126,15 @@ export class ContactService {
     const csv = XLSX.utils.sheet_to_csv(workSheet);
 
     return csv;
+  }
+
+  async exportsPDF(data: Contact[]) {
+    const pdfBuffer = await exportToPdf(data, "exportPDF.ejs");
+
+    if (!pdfBuffer) {
+      throw new httpError(500, "Xuất pdf thất bại");
+    }
+
+    return pdfBuffer;
   }
 }

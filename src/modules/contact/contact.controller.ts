@@ -36,7 +36,7 @@ export class ContactController {
     }
   }
 
-  exportsContact(req: Request, res: Response) {
+  async exportsContact(req: Request, res: Response) {
     const { type, data } = req.body;
 
     console.log(req.body);
@@ -65,6 +65,12 @@ export class ContactController {
           );
           break;
         case ExportType.PDF:
+          contactsExport = await contactService.exportsPDF(data);
+          res.header("Content-Type", UploadMimeTypeFile.PDF);
+          res.header(
+            "Content-Disposition",
+            'attachment; filename="Contact.pdf"'
+          );
           break;
         default:
           break;
@@ -80,21 +86,6 @@ export class ContactController {
     try {
       const contacts = await contactService.imports(req.file);
       res.status(200).json(contacts);
-    } catch (error) {
-      res.status(500).json({ err_message: (error as Error).message });
-    }
-  }
-
-  exportsContactsCSV(req: Request, res: Response) {
-    try {
-      const contacts = contactService.exportsCSV(req.body);
-      // cho client biết kiểu file
-      res.header("Content-Type", "text/csv; charset=utf-8");
-
-      // attachment: file download, filename: ten file
-      res.header("Content-Disposition", 'attachment; filename="Contact.csv"');
-
-      res.status(200).send(contacts);
     } catch (error) {
       res.status(500).json({ err_message: (error as Error).message });
     }
