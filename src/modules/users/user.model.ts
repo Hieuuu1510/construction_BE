@@ -7,38 +7,44 @@ import type { IUser, IUserMethods } from "./user.interface.js";
 // IUser : fields, {} : static, IUserMethods : methods
 type UserModel = mongoose.Model<IUser, {}, IUserMethods>;
 
-const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
-  username: {
-    type: String,
-    required: [true, "username không được để trống"],
-    trim: true,
-    minLength: [3, "username phải nhất 3 ký tự"],
+const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
+  {
+    username: {
+      type: String,
+      required: [true, "username không được để trống"],
+      trim: true,
+      minLength: [3, "username phải nhất 3 ký tự"],
+    },
+    email: {
+      type: String,
+      required: [true, "email không được để trống"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, "Email không hợp lệ"],
+    },
+    password: {
+      type: String,
+      required: [true, "password không được để trống"],
+      minLength: [6, "password phải nhất 6 ký tự"],
+      select: false,
+    },
+    role: {
+      type: String,
+      enum: [Role.USER],
+      default: Role.USER,
+    },
+    status: {
+      type: String,
+      enum: UserStatus,
+      default: UserStatus.ACTIVE,
+    },
   },
-  email: {
-    type: String,
-    required: [true, "email không được để trống"],
-    unique: true,
-    trim: true,
-    lowercase: true,
-    match: [/^\S+@\S+\.\S+$/, "Email không hợp lệ"],
-  },
-  password: {
-    type: String,
-    required: [true, "password không được để trống"],
-    minLength: [6, "password phải nhất 6 ký tự"],
-    select: false,
-  },
-  role: {
-    type: String,
-    enum: [Role.USER],
-    default: Role.USER,
-  },
-  status: {
-    type: String,
-    enum: UserStatus,
-    default: UserStatus.ACTIVE,
-  },
-});
+  {
+    timestamps: true,
+    versionKey: false,
+  }
+);
 
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
