@@ -29,6 +29,13 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       minLength: [6, "password phải nhất 6 ký tự"],
       select: false,
     },
+    phone: {
+      type: String,
+      required: [true, "phone không được để trống"],
+      unique: true,
+      trim: true,
+      match: [/^[0-9]+$/, "Số điện thoại không hợp lệ"],
+    },
     role: {
       type: String,
       enum: [Role.USER],

@@ -1,6 +1,7 @@
 import type { Role } from "../../common/enums/role.enum.js";
 import type { UserStatus } from "../../common/enums/status.enum.js";
 import type { baseEntity } from "../../common/interfaces/common.interface.js";
+import type { IFilterCommon } from "../../common/interfaces/filter.interface.js";
 
 export interface IUser extends baseEntity {
   username: string;
@@ -9,6 +10,7 @@ export interface IUser extends baseEntity {
   role: Role.USER;
   status: UserStatus;
   new_password?: string;
+  phone: string | number;
 }
 
 export interface IUserMethods {
@@ -16,4 +18,8 @@ export interface IUserMethods {
     candidatePassword: string,
     userPassword: string
   ) => Promise<boolean>;
+}
+
+export interface IFilterUser extends IFilterCommon {
+  is_user?: string;
 }

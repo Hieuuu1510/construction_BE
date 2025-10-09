@@ -10,6 +10,8 @@ import constructionCategoryRouter from "../modules/constructionCategory/construc
 import constructionRouter from "../modules/construction/construction.route.js";
 import featuredProjectsRouter from "../modules/featuredProjects/featuredProjects.route.js";
 import contactRouter from "../modules/contact/contact.route.js";
+import authRouter from "../modules/auth/auth.route.js";
+import userRouter from "../modules/users/user.route.js";
 
 const router = Router();
 
@@ -27,5 +29,7 @@ router.use("/construction-category", constructionCategoryRouter);
 router.use("/construction", constructionRouter);
 router.use("/featured-projects", featuredProjectsRouter);
 router.use("/contact", contactRouter);
+router.use("/auth", authRouter);
+router.use("/user", userRouter);
 
 export default router;
