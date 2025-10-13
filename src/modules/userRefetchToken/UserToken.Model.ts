@@ -17,10 +17,6 @@ const UserRefetchTokenSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    is_revoked: {
-      type: Boolean,
-      default: false,
-    },
   },
   {
     timestamps: true,

@@ -7,8 +7,13 @@ import {
 } from "../users/user.schema.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { UserRefetchTokenService } from "../userRefetchToken/UserRefetchToken.service.js";
+import { UserRefetchTokenModel } from "../userRefetchToken/UserToken.Model.js";
+
+const userRefetchTokenService = new UserRefetchTokenService();
 
 export class AuthService {
+  constructor() {}
   async register(body: IUser) {
     const { username, email, password, phone } = body;
 
@@ -41,21 +46,43 @@ export class AuthService {
       throw new httpError(400, "User không tồn tại");
     }
 
-    const token = this.signToken(userExist);
+    const token = this.generateToken(userExist);
+    const refetchToken = await userRefetchTokenService.createUserRefetchToken(
+      userExist._id as string
+    );
 
-    const checkPassword = await userExist.correctPassword(
+    const checkPassword = await this.verifyPassword(
       password,
       userExist.password
     );
+
     if (!checkPassword) {
       throw new httpError(400, "Mật khẩu không chính xác");
     }
-
+    userExist.password = undefined as any;
     return {
       message: "Đăng nhập thành công",
       token,
+      refetchToken: refetchToken.refresh_token,
       data: userExist,
     };
+  }
+
+  async logout(refetchToken: string) {
+    await userRefetchTokenService.revokeUserRefetchToken(refetchToken);
+  }
+
+  async hashPassword(password: string) {
+    const hash = await bcrypt.hash(password, 10);
+    return hash;
+  }
+
+  async verifyPassword(
+    password: string,
+    userPassword: string
+  ): Promise<boolean> {
+    const isPassword = await bcrypt.compare(password, userPassword);
+    return isPassword;
   }
 
   async getMe(id: number | string) {
@@ -68,11 +95,12 @@ export class AuthService {
       throw new httpError(400, "User không tồn tại");
     }
 
-    return userExist;
+    const { password: _, ...userWithoutPassword } = userExist;
+    return userWithoutPassword;
   }
 
   // tạo token
-  signToken(user: IUser) {
+  generateToken(user: IUser) {
     const payload = {
       id: user._id,
       role: user.role,
@@ -89,11 +117,6 @@ export class AuthService {
     return token;
   }
 
-  async hashPassword(password: string) {
-    const hash = await bcrypt.hash(password, 10);
-    return hash;
-  }
-
   async changePass(body: IUser) {
     const validateBody = userValidateChangePass.parse(body);
     const { password, new_password = "", email } = validateBody;
@@ -104,10 +127,7 @@ export class AuthService {
       throw new httpError(500, "User không tồn tại");
     }
 
-    const isPassword = await userExist.correctPassword(
-      password,
-      userExist.password
-    );
+    const isPassword = await this.verifyPassword(password, userExist.password);
 
     if (!isPassword) {
       throw new httpError(500, "Mật khẩu không chính xác");
@@ -122,5 +142,32 @@ export class AuthService {
     await userExist.save();
     // lấy chi tiết user sau khi đổi mật khẩu
     // tạo token mới
+  }
+
+  async refreshToken(refetchToken: string) {
+    if (!refetchToken) {
+      throw new httpError(400, "Refresh token không được để trống");
+    }
+    const now = new Date();
+    const userRefetchToken = await UserRefetchTokenModel.findOne({
+      refresh_token: refetchToken,
+    }).populate("user_id");
+
+    console.log(userRefetchToken);
+
+    if (!userRefetchToken) {
+      throw new httpError(401, "Refresh token không hợp lệ");
+    }
+
+    if (userRefetchToken?.expires_at < now) {
+      await userRefetchTokenService.revokeUserRefetchToken(refetchToken);
+      throw new httpError(401, "Refresh token hết hạn");
+    }
+
+    const token = this.generateToken(userRefetchToken?.user_id as IUser);
+    return {
+      message: "Refresh token thành công",
+      token,
+    };
   }
 }

@@ -3,7 +3,7 @@ import httpError from "../common/helper/httpError.helper.js";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../modules/users/user.model.js";
 
-export const authMiddleware = async (
+export const middlewareTokenAuth = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -40,3 +40,11 @@ export const authMiddleware = async (
     });
   }
 };
+
+// export const refetchTokenMiddleware = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) {
+
+// }

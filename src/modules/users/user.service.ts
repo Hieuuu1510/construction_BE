@@ -1,13 +1,8 @@
 import httpError from "../../common/helper/httpError.helper.js";
 import type { IFilterUser, IUser } from "./user.interface.js";
 import { UserModel } from "./user.model.js";
-import {
-  userUpdateValidation,
-  userValidateChangePass,
-  userValidation,
-} from "./user.schema.js";
+import { userUpdateValidation, userValidation } from "./user.schema.js";
 import { AuthService } from "../auth/auth.service.js";
-import type { IFilterCommon } from "../../common/interfaces/filter.interface.js";
 import { Sort } from "../../common/enums/sort.enum.js";
 import mongoose from "mongoose";
 

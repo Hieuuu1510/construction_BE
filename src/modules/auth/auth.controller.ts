@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { AuthService } from "./auth.service.js";
+import { UserRefetchTokenService } from "../userRefetchToken/UserRefetchToken.service.js";
 
 const authService = new AuthService();
 
@@ -30,10 +31,24 @@ export class AuthController {
   }
 
   async changePass(req: Request, res: Response) {
-    await authService.changePass(req.body);
+    const result = await authService.changePass(req.body);
+
+    return res.status(200).json(result);
+  }
+
+  async logout(req: Request, res: Response) {
+    const { refetchToken } = req.body;
+    await authService.logout(refetchToken);
 
     return res.status(200).json({
-      message: "Đổi mật khẩu thành công",
+      message: "Đăng xuất thành công",
     });
+  }
+
+  async refreshToken(req: Request, res: Response) {
+    const { refetchToken } = req.body;
+    const result = await authService.refreshToken(refetchToken);
+
+    return res.status(200).json(result);
   }
 }

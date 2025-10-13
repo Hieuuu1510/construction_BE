@@ -1,13 +1,12 @@
 import mongoose, { Schema } from "mongoose";
 import { Role } from "../../common/enums/role.enum.js";
 import { UserStatus } from "../../common/enums/status.enum.js";
-import bcrypt from "bcrypt";
 import type { IUser, IUserMethods } from "./user.interface.js";
 
 // IUser : fields, {} : static, IUserMethods : methods
 type UserModel = mongoose.Model<IUser, {}, IUserMethods>;
 
-const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
+const UserSchema = new Schema<IUser>(
   {
     username: {
       type: String,
@@ -32,7 +31,7 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
     phone: {
       type: String,
       required: [true, "phone không được để trống"],
-      unique: true,
+      unique: [true, "Số điện thoại đã được đăng ký"],
       trim: true,
       match: [/^[0-9]+$/, "Số điện thoại không hợp lệ"],
     },
@@ -53,19 +52,4 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
   }
 );
 
-UserSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 12);
-  }
-  next();
-});
-
-// Method để so sánh mật khẩu
-UserSchema.methods.correctPassword = async function (
-  candidatePassword: string,
-  userPassword: string
-): Promise<boolean> {
-  return await bcrypt.compare(candidatePassword, userPassword);
-};
-
-export const UserModel = mongoose.model<IUser, UserModel>("user", UserSchema);
+export const UserModel = mongoose.model<IUser>("user", UserSchema);
