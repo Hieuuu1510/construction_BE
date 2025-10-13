@@ -82,19 +82,11 @@ export class NewsService {
       "news_category_ids"
     );
 
-    const relatedNews = await this.findMany({
-      news_category_ids: [id],
-      exclude_id: newsDetail?._id as mongoose.Types.ObjectId, // $ne lấy tất cả các _id khác trừ _id hiện tại
-    });
-
     if (!newsDetail) {
       throw new httpError(400, "Tin tức không tồn tại");
     }
 
-    return {
-      data: newsDetail,
-      relatedNews: relatedNews.data,
-    };
+    return newsDetail;
   }
 
   async create(data: News) {

@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import httpError from "../common/helper/httpError.helper.js";
 import jwt from "jsonwebtoken";
 import { UserModel } from "../modules/users/user.model.js";
+import { publicRouters } from "../common/constants/publicRoutes.js";
 
 export const middlewareTokenAuth = async (
   req: Request,
@@ -9,6 +10,16 @@ export const middlewareTokenAuth = async (
   next: NextFunction
 ) => {
   try {
+    const { path, method } = req;
+
+    // check api public
+    const isPublicPath = publicRouters.some(
+      (item) => item.method === method && item.path.test(path)
+    );
+    if (isPublicPath) {
+      return next();
+    }
+
     let token;
     if (
       req.headers.authorization &&

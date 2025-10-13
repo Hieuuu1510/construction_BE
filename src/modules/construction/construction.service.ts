@@ -81,19 +81,11 @@ export class ConstructionService {
       "construction_category_ids"
     );
 
-    const relatedNews = await this.findMany({
-      construction_category_ids: id,
-      exclude_id: constructionDetail?._id as mongoose.Types.ObjectId, // $ne lấy tất cả các _id khác trừ _id hiện tại
-    });
-
     if (!constructionDetail) {
       throw new httpError(400, "Tin tức không tồn tại");
     }
 
-    return {
-      data: constructionDetail,
-      relatedNews: relatedNews?.data,
-    };
+    return constructionDetail;
   }
 
   async create(data: IConstruction) {
