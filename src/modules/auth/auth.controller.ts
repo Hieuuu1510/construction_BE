@@ -1,10 +1,7 @@
 import type { Request, Response } from "express";
-import { AuthService } from "./auth.service.js";
-import { UserRefetchTokenService } from "../userRefetchToken/UserRefetchToken.service.js";
+import authService from "./auth.service.js";
 
-const authService = new AuthService();
-
-export class AuthController {
+class AuthController {
   async me(req: Request, res: Response) {
     const { id } = (req as any).user;
 
@@ -52,3 +49,5 @@ export class AuthController {
     return res.status(200).json(result);
   }
 }
+
+export default new AuthController();

@@ -1,13 +1,11 @@
 import type { Request, Response } from "express";
-import { ContactService } from "./contact.service.js";
+import contactService from "./contact.service.js";
 import {
   ExportType,
   UploadMimeTypeFile,
 } from "../../common/enums/export.enum.js";
 
-const contactService = new ContactService();
-
-export class ContactController {
+class ContactController {
   async getContacts(req: Request, res: Response) {
     try {
       const contacts = await contactService.findMany(req.query);
@@ -91,3 +89,5 @@ export class ContactController {
     }
   }
 }
+
+export default new ContactController();

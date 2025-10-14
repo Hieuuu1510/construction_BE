@@ -1,10 +1,7 @@
 import type { Request, Response } from "express";
-import mongoose from "mongoose";
-import { FeaturedProjectsService } from "./featuredProjects.service.js";
+import featuredProjectsService from "./featuredProjects.service.js";
 
-const featuredProjectsService = new FeaturedProjectsService();
-
-export class FeaturedProjectsController {
+class FeaturedProjectsController {
   async getFeaturedProjects(req: Request, res: Response) {
     try {
       const featuredProjects = await featuredProjectsService.findMany(
@@ -92,3 +89,5 @@ export class FeaturedProjectsController {
     }
   }
 }
+
+export default new FeaturedProjectsController();

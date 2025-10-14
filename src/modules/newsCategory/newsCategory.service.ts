@@ -15,7 +15,7 @@ interface INews extends IFilterCommon {
   news_count?: "true";
 }
 
-export class NewsCategoryService {
+class NewsCategoryService {
   async findMany(filter: INews) {
     const {
       page = 1,
@@ -164,3 +164,5 @@ export class NewsCategoryService {
     return resultUpdate;
   }
 }
+
+export default new NewsCategoryService();

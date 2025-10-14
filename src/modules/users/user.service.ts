@@ -2,13 +2,10 @@ import httpError from "../../common/helper/httpError.helper.js";
 import type { IFilterUser, IUser } from "./user.interface.js";
 import { UserModel } from "./user.model.js";
 import { userUpdateValidation, userValidation } from "./user.schema.js";
-import { AuthService } from "../auth/auth.service.js";
 import { Sort } from "../../common/enums/sort.enum.js";
 import mongoose from "mongoose";
 
-const authService = new AuthService();
-
-export class UserService {
+class UserService {
   async getMany(filter: IFilterUser) {
     const {
       page = 1,
@@ -120,3 +117,5 @@ export class UserService {
     return resultRemove;
   }
 }
+
+export default new UserService();

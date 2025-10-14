@@ -1,7 +1,5 @@
 import { Router } from "express";
-import { ConstructionController } from "./construction.controller.js";
-
-const constructionController = new ConstructionController();
+import constructionController from "./construction.controller.js";
 
 const router = Router();
 

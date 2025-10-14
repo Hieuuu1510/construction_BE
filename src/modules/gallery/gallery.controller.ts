@@ -1,12 +1,5 @@
 import type { Request, Response } from "express";
-import { GalleryService } from "./gallery.service.js";
-import {
-  GalleryValidation,
-  GalleryUpdateValidation,
-} from "./gallery.schema.js";
-import mongoose from "mongoose";
-
-const galleryService = new GalleryService();
+import galleryService from "./gallery.service.js";
 
 export class GalleryController {
   async getGalleries(req: Request, res: Response) {

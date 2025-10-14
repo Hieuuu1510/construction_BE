@@ -1,15 +1,7 @@
 import type { Request, Response } from "express";
-import mongoose from "mongoose";
-import { ProductCategoryService } from "./productCategory.service.js";
-import {
-  ProductCategoriesUpdateValidation,
-  ProductCategoriesValidation,
-} from "./productCategory.schema.js";
-import { ProductModel } from "../product/product.model.js";
+import productCategoryService from "./productCategory.service.js";
 
-const productCategoryService = new ProductCategoryService();
-
-export class ProductCategoryController {
+class ProductCategoryController {
   async getProductCategories(req: Request, res: Response) {
     try {
       const galleries = await productCategoryService.findMany(req.query);
@@ -75,3 +67,5 @@ export class ProductCategoryController {
     }
   }
 }
+
+export default new ProductCategoryController();

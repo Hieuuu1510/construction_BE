@@ -1,10 +1,8 @@
 import { Router } from "express";
-import { UploadController } from "./upload.controller.js";
+import uploadController from "./upload.controller.js";
 import { uploadImageVideo } from "../../middleware/multer.js";
 
 const router = Router();
-
-const uploadController = new UploadController();
 
 router.post(
   "/",

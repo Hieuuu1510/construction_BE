@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { ContactController } from "./contact.controller.js";
+import contactController from "./contact.controller.js";
 import { uploadFile } from "../../middleware/multer.js";
 
 const router = Router();
-const contactController = new ContactController();
 
 router.get("/", contactController.getContacts);
 router.get("/:id", contactController.getContact);

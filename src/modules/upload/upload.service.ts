@@ -2,7 +2,7 @@ import { typeUpload } from "../../common/enums/upload.enum.js";
 import cloudinary from "../../config/cloudinary/index.js";
 import fs from "fs";
 
-export class UploadService {
+class UploadService {
   async uploadSingle(file: Express.Multer.File, resource_type: typeUpload) {
     const result = await cloudinary.uploader.upload(file.path, {
       folder: "files",
@@ -79,3 +79,5 @@ export class UploadService {
     return results;
   }
 }
+
+export default new UploadService();

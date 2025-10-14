@@ -1,15 +1,7 @@
 import type { Request, Response } from "express";
-import mongoose from "mongoose";
-import { NewsCategoryService } from "./newsCategory.service.js";
-import {
-  NewsCategoriesUpdateValidation,
-  NewsCategoriesValidation,
-} from "./newsCategory.schema.js";
-import { ProductModel } from "../product/product.model.js";
+import newsCategoryService from "./newsCategory.service.js";
 
-const newsCategoryService = new NewsCategoryService();
-
-export class NewsCategoryController {
+class NewsCategoryController {
   async getNewsCategories(req: Request, res: Response) {
     try {
       const results = await newsCategoryService.findMany(req.query);
@@ -76,3 +68,5 @@ export class NewsCategoryController {
     }
   }
 }
+
+export default new NewsCategoryController();

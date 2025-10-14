@@ -11,7 +11,7 @@ import {
 } from "./productCategory.schema.js";
 import { ProductModel } from "../product/product.model.js";
 
-export class ProductCategoryService {
+class ProductCategoryService {
   async findMany(filter: IFilterCommon) {
     const {
       page = 1,
@@ -108,3 +108,5 @@ export class ProductCategoryService {
     return resultUpdate;
   }
 }
+
+export default new ProductCategoryService();

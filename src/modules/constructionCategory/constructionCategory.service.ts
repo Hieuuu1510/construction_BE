@@ -11,7 +11,7 @@ import {
 import { ConstructionCategoryModel } from "./constructionCategory.model.js";
 import type { IConstructionCategoryFilter } from "./constructionCategory.filter.js";
 
-export class ConstructionCategoryService {
+class ConstructionCategoryService {
   async findMany(filter: IConstructionCategoryFilter) {
     const {
       page = 1,
@@ -166,3 +166,5 @@ export class ConstructionCategoryService {
     return resultUpdate;
   }
 }
+
+export default new ConstructionCategoryService();

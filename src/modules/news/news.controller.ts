@@ -1,9 +1,7 @@
 import type { Request, Response } from "express";
-import { NewsService } from "./news.service.js";
+import newsService from "./news.service.js";
 
-const newsService = new NewsService();
-
-export class NewsController {
+class NewsController {
   async getNews(req: Request, res: Response) {
     try {
       const news = await newsService.findMany(req.query);
@@ -68,3 +66,5 @@ export class NewsController {
     }
   }
 }
+
+export default new NewsController();

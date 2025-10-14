@@ -1,9 +1,7 @@
 import type { Request, Response } from "express";
-import { ProductService } from "./product.service.js";
+import productService from "./product.service.js";
 
-const productService = new ProductService();
-
-export class ProductController {
+class ProductController {
   async getProducts(req: Request, res: Response) {
     try {
       const products = await productService.findMany(req.query);
@@ -66,3 +64,5 @@ export class ProductController {
     }
   }
 }
+
+export default new ProductController();

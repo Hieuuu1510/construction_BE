@@ -1,9 +1,7 @@
 import type { Request, Response } from "express";
-import { ConstructionService } from "./construction.service.js";
+import constructionService from "./construction.service.js";
 
-const constructionService = new ConstructionService();
-
-export class ConstructionController {
+class ConstructionController {
   async getConstructions(req: Request, res: Response) {
     try {
       const constructions = await constructionService.findMany(req.query);
@@ -70,3 +68,5 @@ export class ConstructionController {
     }
   }
 }
+
+export default new ConstructionController();

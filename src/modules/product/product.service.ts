@@ -10,7 +10,7 @@ import {
 import mongoose from "mongoose";
 import type { IProducts } from "./product.filter.js";
 
-export class ProductService {
+class ProductService {
   async findMany(filter: IProducts) {
     const {
       page = 1,
@@ -114,3 +114,5 @@ export class ProductService {
     return resultUpdate;
   }
 }
+
+export default new ProductService();

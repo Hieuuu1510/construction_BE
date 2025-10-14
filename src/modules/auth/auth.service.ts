@@ -12,7 +12,7 @@ import { UserRefetchTokenModel } from "../userRefetchToken/UserToken.Model.js";
 
 const userRefetchTokenService = new UserRefetchTokenService();
 
-export class AuthService {
+class AuthService {
   constructor() {}
   async register(body: IUser) {
     const { username, email, password, phone } = body;
@@ -171,3 +171,5 @@ export class AuthService {
     };
   }
 }
+
+export default new AuthService();

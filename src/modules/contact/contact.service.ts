@@ -9,7 +9,7 @@ import { exportToExcel } from "../../common/helper/exportToExcel.helper.js";
 import fs from "fs";
 import { exportToPdf } from "../../common/helper/exportToPdf.helper.js";
 
-export class ContactService {
+class ContactService {
   async findMany(filter: IFilterCommon) {
     const {
       page = 1,
@@ -138,3 +138,5 @@ export class ContactService {
     return pdfBuffer;
   }
 }
+
+export default new ContactService();

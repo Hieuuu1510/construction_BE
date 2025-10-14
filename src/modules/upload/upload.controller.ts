@@ -1,10 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
-import { UploadService } from "./upload.service.js";
+import uploadService from "./upload.service.js";
 import { typeUpload } from "../../common/enums/upload.enum.js";
 
-const uploadService = new UploadService();
-
-export class UploadController {
+class UploadController {
   async uploadSingle(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.file)
@@ -45,3 +43,5 @@ export class UploadController {
     }
   }
 }
+
+export default new UploadController();

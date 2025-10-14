@@ -10,7 +10,7 @@ import type { IFilterCommon } from "../../common/interfaces/filter.interface.js"
 import httpError from "../../common/helper/httpError.helper.js";
 import mongoose from "mongoose";
 
-export class GalleryService {
+class GalleryService {
   async findMany(filter: IFilterCommon) {
     const {
       page = 1,
@@ -133,3 +133,5 @@ export class GalleryService {
     return resultUpdate;
   }
 }
+
+export default new GalleryService();

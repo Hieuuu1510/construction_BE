@@ -1,9 +1,7 @@
 import type { Request, Response } from "express";
-import { ConstructionCategoryService } from "./constructionCategory.service.js";
+import constructionCategoryService from "./constructionCategory.service.js";
 
-const constructionCategoryService = new ConstructionCategoryService();
-
-export class ConstructionCategoryController {
+class ConstructionCategoryController {
   async getConstructionCategories(req: Request, res: Response) {
     try {
       const news = await constructionCategoryService.findMany(req.query);
@@ -70,3 +68,5 @@ export class ConstructionCategoryController {
     }
   }
 }
+
+export default new ConstructionCategoryController();

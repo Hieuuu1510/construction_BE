@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { NewsCategoryController } from "./newsCategory.controller.js";
+import newsCategoryController from "./newsCategory.controller.js";
 
 const router = Router();
-const newsCategoryController = new NewsCategoryController();
 
 router.post("/create", newsCategoryController.createNewsCategory);
 router.get("/", newsCategoryController.getNewsCategories);

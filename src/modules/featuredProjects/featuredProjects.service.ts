@@ -10,7 +10,7 @@ import {
   type FeaturedProjectsUpdate,
 } from "./featuredProjects.schema.js";
 
-export class FeaturedProjectsService {
+class FeaturedProjectsService {
   async findMany(filter: IFilterCommon) {
     const {
       page = 1,
@@ -137,3 +137,5 @@ export class FeaturedProjectsService {
     return resultUpdate;
   }
 }
+
+export default new FeaturedProjectsService();

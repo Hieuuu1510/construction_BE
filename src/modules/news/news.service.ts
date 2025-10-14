@@ -10,7 +10,7 @@ import httpError from "../../common/helper/httpError.helper.js";
 import mongoose from "mongoose";
 import type { INews } from "./news.filter.js";
 
-export class NewsService {
+class NewsService {
   async findMany(filter: INews) {
     const {
       page = 1,
@@ -129,3 +129,5 @@ export class NewsService {
     return resultUpdate;
   }
 }
+
+export default new NewsService();

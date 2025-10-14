@@ -10,7 +10,7 @@ import {
   type IConstructionUpdate,
 } from "./construction.schema.js";
 
-export class ConstructionService {
+class ConstructionService {
   async findMany(filter: IConstructionFilter) {
     const {
       page = 1,
@@ -128,3 +128,5 @@ export class ConstructionService {
     return resultUpdate;
   }
 }
+
+export default new ConstructionService();

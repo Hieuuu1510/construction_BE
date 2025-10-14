@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { FeaturedProjectsController } from "./featuredProjects.controller.js";
+import featuredProjectsController from "./featuredProjects.controller.js";
 
 const router = Router();
-const featuredProjectsController = new FeaturedProjectsController();
 
 router.post("/create", featuredProjectsController.createFeaturedProject);
 router.get("/", featuredProjectsController.getFeaturedProjects);
