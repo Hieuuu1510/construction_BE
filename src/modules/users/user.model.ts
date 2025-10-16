@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { Role } from "../../common/enums/role.enum.js";
 import { UserStatus } from "../../common/enums/status.enum.js";
 import type { IUser, IUserMethods } from "./user.interface.js";
+import trackUserActions from "../../middleware/trackUserAction.js";
 
 // IUser : fields, {} : static, IUserMethods : methods
 type UserModel = mongoose.Model<IUser, {}, IUserMethods>;
@@ -45,11 +46,24 @@ const UserSchema = new Schema<IUser>(
       enum: UserStatus,
       default: UserStatus.ACTIVE,
     },
+    created_uid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
+    update_uid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
   }
 );
+
+// middleware
+trackUserActions(UserSchema);
 
 export const UserModel = mongoose.model<IUser>("user", UserSchema);
