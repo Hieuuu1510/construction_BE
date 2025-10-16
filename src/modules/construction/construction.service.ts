@@ -47,6 +47,10 @@ class ConstructionService {
       };
     }
 
+    if (filter?.status) {
+      queryObj.status = { $in: filter.status };
+    }
+
     const baseQuery = ConstructionModel.find(queryObj)
       .limit(limit)
       .skip(skip)

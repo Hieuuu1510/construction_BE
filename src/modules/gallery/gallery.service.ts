@@ -31,6 +31,10 @@ class GalleryService {
       ];
     }
 
+    if (filter?.status) {
+      queryObj.status = { $in: filter.status };
+    }
+
     const baseQuery = GalleryModel.find(queryObj)
       .limit(limit)
       .skip(skip)

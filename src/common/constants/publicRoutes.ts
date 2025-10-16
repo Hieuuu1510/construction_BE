@@ -11,4 +11,5 @@ export const publicRouters = [
   { path: /^\/api\/product(\/[A-Za-z0-9]+)?$/, method: "GET" },
   { path: /^\/api\/product-category(\/[A-Za-z0-9]+)?$/, method: "GET" },
   { path: /^\/api\/contact(\/[A-Za-z0-9]+)?$/, method: "POST" },
+  { path: /^\/api\/contact(\/[A-Za-z0-9]+)?$/, method: "GET" },
 ];

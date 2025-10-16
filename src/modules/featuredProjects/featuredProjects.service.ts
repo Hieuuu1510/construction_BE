@@ -31,6 +31,10 @@ class FeaturedProjectsService {
       ];
     }
 
+    if (filter?.status) {
+      queryObj.status = { $in: filter.status };
+    }
+
     const baseQuery = FeaturedProjectsModel.find(queryObj)
       .limit(limit)
       .skip(skip)

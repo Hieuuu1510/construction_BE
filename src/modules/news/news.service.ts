@@ -47,6 +47,10 @@ class NewsService {
       };
     }
 
+    if (filter?.status) {
+      queryObj.status = { $in: filter.status };
+    }
+
     const baseQuery = NewsModel.find(queryObj)
       .limit(limit)
       .skip(skip)

@@ -8,6 +8,7 @@ import XLSX from "xlsx";
 import { exportToExcel } from "../../common/helper/exportToExcel.helper.js";
 import fs from "fs";
 import { exportToPdf } from "../../common/helper/exportToPdf.helper.js";
+import { buildDateFilter } from "../../common/helper/buildDateFilter.helper.js";
 
 class ContactService {
   async findMany(filter: IFilterCommon) {
@@ -17,6 +18,8 @@ class ContactService {
       query,
       sort = Sort.DESC,
       column = "createdAt",
+      from,
+      to,
     } = filter;
 
     const skip = (page - 1) * limit;
@@ -28,6 +31,15 @@ class ContactService {
         { name: { $regex: query, $options: "i" } },
         { email: { $regex: query, $options: "i" } },
       ];
+    }
+
+    const dateFilter = buildDateFilter({
+      from: from as string,
+      to: to as string,
+    });
+
+    if (Object.keys(dateFilter).length > 0) {
+      queryObj.createdAt = dateFilter;
     }
 
     const baseQuery = ContactModel.find(queryObj)

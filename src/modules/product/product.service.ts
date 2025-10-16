@@ -1,6 +1,5 @@
 import { ProductModel } from "./product.model.js";
 import { Sort } from "../../common/enums/sort.enum.js";
-import type { IFilterCommon } from "../../common/interfaces/filter.interface.js";
 import {
   ProductUpdateValidation,
   ProductValidation,
@@ -33,6 +32,10 @@ class ProductService {
 
     if (filter?.product_category_ids) {
       queryObj.product_category_id = filter.product_category_ids;
+    }
+
+    if (filter?.status) {
+      queryObj.status = { $in: filter.status };
     }
 
     const baseQuery = ProductModel.find(queryObj)
