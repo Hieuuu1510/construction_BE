@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { generateSlug } from "../../common/utils/generateSlug.js";
 import { Status } from "../../common/enums/status.enum.js";
+import trackUserActions from "../../middleware/trackUserAction.js";
 
 const constructionSchema = new mongoose.Schema(
   {
@@ -38,12 +39,24 @@ const constructionSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    created_uid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
+    update_uid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
   }
 );
+
+trackUserActions(constructionSchema);
 
 constructionSchema.pre("save", async function (next) {
   const Model = this.constructor; // trỏ đến model hiện tại

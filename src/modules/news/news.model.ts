@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { generateSlug } from "../../common/utils/generateSlug.js";
 import { Status } from "../../common/enums/status.enum.js";
+import trackUserActions from "../../middleware/trackUserAction.js";
 
 const NewsSchema = new mongoose.Schema(
   {
@@ -38,6 +39,16 @@ const NewsSchema = new mongoose.Schema(
       enum: Status,
       default: Status.ACTIVE,
     },
+    created_uid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
+    update_uid: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -46,6 +57,8 @@ const NewsSchema = new mongoose.Schema(
 );
 
 // middleware
+trackUserActions(NewsSchema);
+
 NewsSchema.pre("save", async function (next) {
   const Model = this.constructor; // trỏ đến model hiện tại
   if (this.isModified("title") || this.isNew) {

@@ -20,6 +20,7 @@ export const middlewareTokenAuth = async (
       return next();
     }
 
+    let decode: any;
     let token;
     if (
       req.headers.authorization &&
@@ -27,27 +28,30 @@ export const middlewareTokenAuth = async (
     ) {
       token = req.headers.authorization.split(" ")[1];
     }
-
     if (!token) {
-      throw new httpError(401, "Bạn không có quyền truy cập");
+      return res.status(401).json({ message: "Bạn không có quyền truy cập" });
     }
-    // decode xem có phải là object không
-    const decode = jwt.verify(token, process.env.JWT_SECRET as string);
+
+    try {
+      decode = jwt.verify(token, process.env.JWT_SECRET as string);
+    } catch (error) {
+      if ((error as any)?.name === "TokenExpiredError") {
+        decode = jwt.decode(token);
+      }
+    }
+
     if (!decode) {
-      throw new httpError(401, "Bạn không có quyền truy cập");
+      return res.status(401).json({ message: "Token không hợp lệ" });
     }
+
+    console.log(decode);
 
     (req as any).user = await UserModel.findById((decode as any).id);
     next();
   } catch (error) {
-    if ((error as any)?.name === "JsonWebTokenError") {
-      return res.status(401).json({
-        message: "Token hết hạn",
-      });
-    }
-
-    return res.status(401).json({
-      message: "Token không hợp lệ",
+    console.log(error);
+    return res.status(500).json({
+      message: "Xác thực thất bại",
     });
   }
 };

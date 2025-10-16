@@ -5,6 +5,7 @@ import router from "./routers/index.js";
 import cors from "cors";
 import { errorGlobal } from "./middleware/errorGlobal.js";
 import { middlewareTokenAuth } from "./middleware/auth.js";
+import { requestContext } from "./middleware/requestContext.js";
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("uploads"));
 
 app.use(middlewareTokenAuth);
+app.use(requestContext);
 app.use("/api", router);
 
 // global error handler
