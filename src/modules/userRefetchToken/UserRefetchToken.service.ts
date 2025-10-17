@@ -3,7 +3,7 @@ import { UserRefetchTokenModel } from "./UserToken.Model.js";
 import httpError from "../../common/helper/httpError.helper.js";
 import type { IUserRefetchToken } from "./UserRefetchToken.interface.js";
 
-export class UserRefetchTokenService {
+class UserRefetchTokenService {
   async createUserRefetchToken(user_id: string) {
     const refresh_token = crypto.randomBytes(64).toString("hex");
     const expires_at = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 ngày
@@ -61,3 +61,5 @@ export class UserRefetchTokenService {
     return userRefetchToken?.refresh_token;
   }
 }
+
+export default new UserRefetchTokenService();

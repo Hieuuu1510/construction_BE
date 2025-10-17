@@ -47,6 +47,10 @@ class ConstructionService {
       };
     }
 
+    const expires = Date.now() + 1000 * 5; // 5 phút
+
+    console.log(expires - Date.now());
+
     if (filter?.status) {
       queryObj.status = { $in: filter.status };
     }

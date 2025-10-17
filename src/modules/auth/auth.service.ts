@@ -7,10 +7,8 @@ import {
 } from "../users/user.schema.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { UserRefetchTokenService } from "../userRefetchToken/UserRefetchToken.service.js";
+import userRefetchTokenService from "../userRefetchToken/UserRefetchToken.service.js";
 import { UserRefetchTokenModel } from "../userRefetchToken/UserToken.Model.js";
-
-const userRefetchTokenService = new UserRefetchTokenService();
 
 class AuthService {
   constructor() {}

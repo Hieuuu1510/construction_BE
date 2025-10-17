@@ -44,7 +44,7 @@ const UserSchema = new Schema<IUser>(
     status: {
       type: String,
       enum: UserStatus,
-      default: UserStatus.ACTIVE,
+      default: UserStatus.INACTIVE,
     },
     created_uid: {
       type: mongoose.Schema.Types.ObjectId,
