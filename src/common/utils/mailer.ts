@@ -14,6 +14,6 @@ await transporter.verify().catch((error) => {
   throw new httpError(500, "Gmail không kết nối được");
 });
 
-console.log("Gmail kết nối thành công");
+console.log("Gmail connected");
 
 export default transporter;

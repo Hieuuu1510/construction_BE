@@ -9,5 +9,6 @@ client.on("error", (err) => {
 });
 
 await client.connect();
+console.log("Redis connected");
 
 export default client;

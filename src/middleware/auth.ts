@@ -28,6 +28,7 @@ export const middlewareTokenAuth = async (
     ) {
       token = req.headers.authorization.split(" ")[1];
     }
+    console.log(decode);
     if (!token) {
       return res.status(401).json({ message: "Bạn không có quyền truy cập" });
     }
@@ -43,8 +44,6 @@ export const middlewareTokenAuth = async (
     if (!decode) {
       return res.status(401).json({ message: "Token không hợp lệ" });
     }
-
-    console.log(decode);
 
     (req as any).user = await UserModel.findById((decode as any).id);
     next();

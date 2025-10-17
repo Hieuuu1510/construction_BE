@@ -13,7 +13,7 @@ class mailService {
       const redisKey = `otp:${email}`;
       const expires = 60 * 60; // 1 giờ
       await transporter.sendMail({
-        from: `Construction <${process.env.GMAIL_USER}>`,
+        from: `Hiếu bão tố <${process.env.GMAIL_USER}>`,
         to: email,
         subject: "Mã xác nhận email",
         html: `Mã xác nhận của bạn là: ${generateCode}. Hãy nhập mã này để xác nhận email. Mã này có hiệu lực trong 5 phút.`,

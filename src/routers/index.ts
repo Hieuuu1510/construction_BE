@@ -12,6 +12,7 @@ import featuredProjectsRouter from "../modules/featuredProjects/featuredProjects
 import contactRouter from "../modules/contact/contact.route.js";
 import authRouter from "../modules/auth/auth.route.js";
 import userRouter from "../modules/users/user.route.js";
+import mailRouter from "../modules/mail/mail.route.js";
 
 const router = Router();
 
@@ -31,5 +32,6 @@ router.use("/featured-projects", featuredProjectsRouter);
 router.use("/contact", contactRouter);
 router.use("/auth", authRouter);
 router.use("/user", userRouter);
+router.use("/mail", mailRouter);
 
 export default router;
