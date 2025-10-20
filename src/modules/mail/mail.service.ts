@@ -1,6 +1,7 @@
+import { Status } from "../../common/enums/status.enum.js";
 import httpError from "../../common/helper/httpError.helper.js";
 import { generateOtp } from "../../common/utils/generateOtp.js";
-import transporter from "../../common/utils/mailer.js";
+import transporter from "../../config/mail/index.js";
 import client from "../../config/redis/index.js";
 import { UserModel } from "../users/user.model.js";
 import { mailValidation, sendOtpEmailValidation } from "./mail.schema.js";
@@ -11,7 +12,7 @@ class mailService {
       await sendOtpEmailValidation.parseAsync({ email });
       const generateCode = generateOtp();
       const redisKey = `otp:${email}`;
-      const expires = 60 * 60; // 1 giờ
+      const expires = 5 * 60; // 5 phút
       await transporter.sendMail({
         from: `Hiếu bão tố <${process.env.GMAIL_USER}>`,
         to: email,
@@ -36,7 +37,6 @@ class mailService {
     // check email tồn tại trong db chưa
     // check expires của otp còn hiệu lực không
     // check otp có chính xác không
-    //
     try {
       await mailValidation.parseAsync({ email, otp });
       const redisKeyByEmail = await client.get(`otp:${email}`);
@@ -52,10 +52,30 @@ class mailService {
         throw new httpError(400, "Otp không chính xác");
       }
 
-      return "Đang test nha";
+      // update user
+      await UserModel.updateOne({ email }, { status: Status.ACTIVE });
+
+      return {
+        message: "Xác nhận otp thành công",
+      };
     } catch (error) {
       console.log(error);
       throw new httpError(500, "Xác nhận otp thất bại");
+    }
+  }
+
+  async sendEmailByContactUser(email: string) {
+    try {
+      await sendOtpEmailValidation.parseAsync({ email });
+      await transporter.sendMail({
+        from: "Hiếu bão tố",
+        to: process.env.GMAIL_USER,
+        subject: "có khách hàng mới liên hệ với bạn",
+        html: `có khách hàng mới <${email}> liên hệ với bạn. Hãy kiểm tra mail ngày nhé!!!`,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new httpError(500, "Gửi mail thất bại");
     }
   }
 }

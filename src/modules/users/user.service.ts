@@ -4,6 +4,8 @@ import { UserModel } from "./user.model.js";
 import { userUpdateValidation, userValidation } from "./user.schema.js";
 import { Sort } from "../../common/enums/sort.enum.js";
 import mongoose from "mongoose";
+import mailController from "../mail/mail.controller.js";
+import mailService from "../mail/mail.service.js";
 
 class UserService {
   async getMany(filter: IFilterUser) {
@@ -77,6 +79,8 @@ class UserService {
     if (!resultCreate) {
       throw new httpError(400, "Tạo user thất bại");
     }
+
+    await mailService.sendOtpEmail(user.email);
 
     return resultCreate;
   }

@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import httpError from "../helper/httpError.helper.js";
+import httpError from "../../common/helper/httpError.helper.js";
 
 // khởi tạo đối tượng gửi mail
 const transporter = nodemailer.createTransport({

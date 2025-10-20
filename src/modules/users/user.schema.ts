@@ -1,4 +1,5 @@
 import z from "zod";
+import { Status } from "../../common/enums/status.enum.js";
 
 export const userValidation = z.object({
   _id: z.string().optional(),
@@ -6,7 +7,7 @@ export const userValidation = z.object({
   password: z.string("password phải có kiểu string").trim(),
   email: z.email("email không hợp lệ").trim(),
   role: z.enum(["user"], "role không hợp lệ").optional(),
-  status: z.boolean().optional(),
+  status: z.enum(Status).optional(),
   new_password: z.string().min(6).optional(),
 });
 

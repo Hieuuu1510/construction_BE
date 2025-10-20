@@ -9,6 +9,7 @@ import { exportToExcel } from "../../common/helper/exportToExcel.helper.js";
 import fs from "fs";
 import { exportToPdf } from "../../common/helper/exportToPdf.helper.js";
 import { buildDateFilter } from "../../common/helper/buildDateFilter.helper.js";
+import mailService from "../mail/mail.service.js";
 
 class ContactService {
   async findMany(filter: IFilterCommon) {
@@ -83,6 +84,9 @@ class ContactService {
     if (!create) {
       throw new httpError(500, "Tạo liên hệ thất bại");
     }
+
+    // send email to admin
+    await mailService.sendEmailByContactUser(data.email);
 
     return create;
   }

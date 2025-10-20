@@ -1,4 +1,3 @@
-import type mongoose from "mongoose";
 import type { Role } from "../../common/enums/role.enum.js";
 import type { UserStatus } from "../../common/enums/status.enum.js";
 import type { baseEntity } from "../../common/interfaces/common.interface.js";
